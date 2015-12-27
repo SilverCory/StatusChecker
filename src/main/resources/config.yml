@@ -1,0 +1,26 @@
+###########################
+# Thingy thing for things #
+###########################
+
+teamspeak:
+    hostname: 'localhost'
+    username: 'status'
+    password: 'password123'
+    port: 10011
+    alertGroupIds:
+      - 6
+      - 9
+
+alerts:
+    firstAlert:
+        chances: 5
+        message: 'The server [server] is down on [category]!'
+    repeatingAlert:
+        everyChances: 150
+        message: 'The server [server] on [category] has been down for a while now!!'
+
+status:
+    url: "http://localhost:8080/status?[random]"
+    reapeatTime: 5
+
+bungeeonly: true

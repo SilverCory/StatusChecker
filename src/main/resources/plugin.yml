@@ -1,0 +1,9 @@
+main: co.ryred.statuschecker.StatusPluginBukkit
+
+name: StatusChecker
+
+author: Cory Redmond
+
+version: ${pom.version}-#${env.BUILD_NUMBER}
+
+description: Alerts and notifications for teamspeak.
