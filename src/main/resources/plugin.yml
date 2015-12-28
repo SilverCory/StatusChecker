@@ -1,4 +1,4 @@
-main: co.ryred.statuschecker.StatusPluginBukkit
+main: co.ryred.statuschecker.plugins.StatusPluginBukkit
 
 name: StatusChecker
 

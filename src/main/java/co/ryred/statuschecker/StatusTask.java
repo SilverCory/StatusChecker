@@ -1,7 +1,9 @@
 package co.ryred.statuschecker;
 
 import co.ryred.statuschecker.pojo.Status;
+import co.ryred.statuschecker.util.LogsUtil;
 import com.google.gson.Gson;
+import sun.rmi.runtime.Log;
 
 import java.net.URL;
 import java.util.*;
@@ -41,10 +43,14 @@ public class StatusTask implements Runnable {
         try {
             URL url = new URL( urlString.replace( "[random]", String.valueOf( random.nextInt() ) ) );
 
-            Status status = gson.fromJson( new Scanner( url.openStream(), "UTF-8" ).useDelimiter( "\\A" ).next(), Status.class);
+            String statusJson = new Scanner( url.openStream(), "UTF-8" ).useDelimiter( "\\A" ).next();
+            LogsUtil._D( "Status Json:" );
+            LogsUtil._D( statusJson );
+            Status status = gson.fromJson( statusJson, Status.class);
 
             if( last_status != null ) {
 
+                LogsUtil._D( "Last status was not null!" );
                 Iterator<Map.Entry<String, Integer>> deadIterator = chances.entrySet().iterator();
 
                 while( deadIterator.hasNext() ) {
@@ -53,12 +59,14 @@ public class StatusTask implements Runnable {
 
                     if( path.length == 2 && status.getDead().containsKey( path[0] ) ) {
                         ArrayList<String> deadList = status.getDead().get(path[0]);
-                        if( doBungeeCheck( path[2] ) && deadList != null && deadList.contains( path[ 2 ] ) ) {
+                        if( !doBungeeCheck( path[1] ) && deadList != null && deadList.contains( path[1] ) ) {
                             entry.setValue( entry.getValue() + 1 );
                         } else {
+                            LogsUtil._D( "Server is alive again? B", path );
                             deadIterator.remove();
                         }
                     } else {
+                        LogsUtil._D( "Server is alive again? A", path );
                         deadIterator.remove();
                     }
 
@@ -76,8 +84,10 @@ public class StatusTask implements Runnable {
 
                     category.getValue().entrySet().stream().filter(entry -> status.getDead().containsKey(category.getKey())).forEach(entry -> {
                         ArrayList<String> kek = status.getDead().get(category.getKey());
-                        if ( doBungeeCheck(entry.getKey()) && kek != null && kek.contains(entry.getKey())) {
-                            chances.put(category.getKey() + "_-_-_" + entry.getKey(), 1);
+                        if ( !doBungeeCheck(entry.getKey()) && kek != null && kek.contains(entry.getKey())) {
+                            String key = category.getKey() + "_-_-_" + entry.getKey();
+                            chances.put(key, 1);
+                            LogsUtil._D( "Server is down!" + key );
                         }
                     });
 
@@ -88,6 +98,7 @@ public class StatusTask implements Runnable {
             last_status = status;
 
             if( messages.size() > 0 ) callback.doAlert(messages);
+            else LogsUtil._D( "No messages after status check!" );
 
         } catch (Exception e) {
             e.printStackTrace();

@@ -1,14 +1,18 @@
-package co.ryred.statuschecker;
+package co.ryred.statuschecker.plugins;
 
+import co.ryred.statuschecker.StatusTask;
+import co.ryred.statuschecker.TeamspeakTask;
+import co.ryred.statuschecker.util.LogsUtil;
 import com.google.common.io.ByteStreams;
+import net.md_5.bungee.api.event.ProxyReloadEvent;
+import net.md_5.bungee.api.plugin.Listener;
 import net.md_5.bungee.api.plugin.Plugin;
 import net.md_5.bungee.config.Configuration;
 import net.md_5.bungee.config.ConfigurationProvider;
 import net.md_5.bungee.config.YamlConfiguration;
+import net.md_5.bungee.event.EventHandler;
 
 import java.io.*;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -16,11 +20,24 @@ import java.util.concurrent.TimeUnit;
  *
  * @author Cory Redmond <ace@ac3-servers.eu>
  */
-public class StatusPluginBungee extends Plugin {
+public class StatusPluginBungee extends Plugin implements Listener {
+
+    @Override
+    public void onLoad() {
+        LogsUtil.setLogger( getLogger() );
+    }
 
     @Override
     public void onEnable() {
         new BungeeConfig( this );
+        getProxy().getPluginManager().registerListener( this, this );
+    }
+
+    @EventHandler
+    public void onReload( ProxyReloadEvent event ) {
+        getProxy().getScheduler().cancel( this );
+        new BungeeConfig( this );
+        getLogger().info( "Reloaded StatusChecker's config." );
     }
 
 }
@@ -63,6 +80,8 @@ final class BungeeConfig {
 
         StatusTask.firstAlert = getConfig().getInt( "alerts.firstAlert.chances" );
         StatusTask.firstMessage = getConfig().getString("alerts.firstAlert.message", "The server [server] is down on [category]!" );
+
+        LogsUtil.setDebug( getConfig().getBoolean( "debug", false ) );
 
         int repeatTime = getConfig().getInt( "status.reapeatTime", 5 );
 

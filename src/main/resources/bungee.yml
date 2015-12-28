@@ -1,4 +1,4 @@
-main: co.ryred.statuschecker.StatusPluginBungee
+main: co.ryred.statuschecker.plugins.StatusPluginBungee
 
 name: StatusChecker
 

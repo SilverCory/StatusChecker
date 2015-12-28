@@ -1,1 +1,1 @@
-kek yeah I know this is messy I'll clean it up some time when I'm not tired.
+kek yeah I know this is messy I'll clean it up some time when I'm not tired.start

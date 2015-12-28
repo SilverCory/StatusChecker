@@ -1,9 +1,11 @@
-package co.ryred.statuschecker;
+package co.ryred.statuschecker.plugins;
 
+import co.ryred.statuschecker.StatusTask;
+import co.ryred.statuschecker.TeamspeakTask;
+import co.ryred.statuschecker.util.LogsUtil;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
-import java.util.ArrayList;
 
 /**
  * Created by Cory Redmond on 27/12/2015.
@@ -32,6 +34,8 @@ public class StatusPluginBukkit extends JavaPlugin {
         StatusTask.firstMessage = getConfig().getString("alerts.firstAlert.message", "The server [server] is down on [category]!" );
 
         StatusTask.bungeeOnly = getConfig().getBoolean( "bungeeonly", true );
+
+        LogsUtil.setDebug( getConfig().getBoolean( "debug", false ) );
 
         int repeatTime = getConfig().getInt( "status.reapeatTime", 5 ) * 20;
 

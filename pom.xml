@@ -53,8 +53,8 @@
                         <configuration>
                             <relocations>
                                 <relocation>
-                                    <pattern>com.google</pattern>
-                                    <shadedPattern>co.ryred.statuschecker.shade.com.google</shadedPattern>
+                                    <pattern>com.google.code.gson</pattern>
+                                    <shadedPattern>co.ryred.statuschecker.shade.com.google.code.gson</shadedPattern>
                                 </relocation>
                             </relocations>
                         </configuration>
