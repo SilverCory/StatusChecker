@@ -1,7 +1,6 @@
 package co.ryred.statuschecker;
 
 import co.ryred.statuschecker.util.LogsUtil;
-import com.google.common.collect.Lists;
 
 import java.io.BufferedReader;
 import java.io.IOException;
