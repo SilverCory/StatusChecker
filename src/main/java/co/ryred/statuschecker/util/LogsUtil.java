@@ -34,7 +34,7 @@ public class LogsUtil
     public static void _D( Object... objects )
     {
 
-        //if( !isDebug() ) return;
+        if( !isDebug() ) return;
 
         StringBuilder sb = new StringBuilder( "[D]" );
 
