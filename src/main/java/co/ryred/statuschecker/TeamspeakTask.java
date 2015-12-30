@@ -1,5 +1,6 @@
 package co.ryred.statuschecker;
 
+import co.ryred.statuschecker.util.LogsUtil;
 import com.github.theholywaffle.teamspeak3.TS3Api;
 import com.github.theholywaffle.teamspeak3.TS3Config;
 import com.github.theholywaffle.teamspeak3.TS3Query;
@@ -42,6 +43,7 @@ public class TeamspeakTask implements Runnable {
 
         config.setFloodRate(TS3Query.FloodRate.UNLIMITED);
         config.setDebugLevel(Level.WARNING);
+        if(LogsUtil._D()) config.setDebugLevel(Level.INFO);
         config.setDebugToFile(false);
 
         final TS3Query query = new TS3Query(config);
