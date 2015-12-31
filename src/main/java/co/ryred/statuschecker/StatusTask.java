@@ -3,10 +3,10 @@ package co.ryred.statuschecker;
 import co.ryred.statuschecker.pojo.Status;
 import co.ryred.statuschecker.util.LogsUtil;
 import com.google.gson.Gson;
-import sun.rmi.runtime.Log;
 
 import java.net.URL;
 import java.util.*;
+import java.util.regex.Pattern;
 
 /**
  * Created by Cory Redmond on 27/12/2015.
@@ -24,7 +24,8 @@ public class StatusTask implements Runnable {
 
     public static int everyAlerts = 150;
     public static String everyMessage = "The server [server] on [category] has been down for a while now!!";
-    public static boolean bungeeOnly;
+
+    public static ArrayList<String> regexList = new ArrayList<>();
 
     private Status last_status = null;
     private HashMap<String, Integer> chances = new HashMap<>();
@@ -59,7 +60,7 @@ public class StatusTask implements Runnable {
 
                     if( path.length == 2 && status.getDead().containsKey( path[0] ) ) {
                         ArrayList<String> deadList = status.getDead().get(path[0]);
-                        if( !doBungeeCheck( path[1] ) && deadList != null && deadList.contains( path[1] ) ) {
+                        if( isMatch(entry.getKey()) && deadList != null && deadList.contains( path[1] ) ) {
                             entry.setValue( entry.getValue() + 1 );
                         } else {
                             LogsUtil._D( "Server is alive again? B", path );
@@ -84,7 +85,7 @@ public class StatusTask implements Runnable {
 
                     category.getValue().entrySet().stream().filter(entry -> status.getDead().containsKey(category.getKey())).forEach(entry -> {
                         ArrayList<String> kek = status.getDead().get(category.getKey());
-                        if ( !doBungeeCheck(entry.getKey()) && kek != null && kek.contains(entry.getKey())) {
+                        if ( isMatch(entry.getKey()) && kek != null && kek.contains(entry.getKey())) {
                             String key = category.getKey() + "_-_-_" + entry.getKey();
                             chances.put(key, 1);
                             LogsUtil._D( "Server is down!" + key );
@@ -106,8 +107,10 @@ public class StatusTask implements Runnable {
 
     }
 
-    private boolean doBungeeCheck(String s) {
-        return bungeeOnly && s.toUpperCase().contains("BUNGEE");
+    private static boolean isMatch( String serverName ) {
+        for( String pattern : regexList )
+            if ( Pattern.compile( pattern, Pattern.CASE_INSENSITIVE ).matcher( serverName ).find() ) return true;
+        return false;
     }
 
 }

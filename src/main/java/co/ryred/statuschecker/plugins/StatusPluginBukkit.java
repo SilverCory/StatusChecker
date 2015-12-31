@@ -33,7 +33,8 @@ public class StatusPluginBukkit extends JavaPlugin {
         StatusTask.firstAlert = getConfig().getInt( "alerts.firstAlert.chances" );
         StatusTask.firstMessage = getConfig().getString("alerts.firstAlert.message", "The server [server] is down on [category]!" );
 
-        StatusTask.bungeeOnly = getConfig().getBoolean( "bungeeonly", true );
+        StatusTask.regexList.clear();
+        StatusTask.regexList.addAll( getConfig().getStringList( "matchName" ) );
 
         LogsUtil.setDebug( getConfig().getBoolean( "debug", false ) );
 

@@ -23,4 +23,6 @@ status:
     url: "http://localhost:8080/status?[random]"
     reapeatTime: 5
 
-bungeeonly: true
+matchName:
+  - '(.*)'
+#  - '(.*bungee.*)'
